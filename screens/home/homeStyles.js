@@ -20,13 +20,13 @@ export const homeStyles = StyleSheet.create({
   button: {
     marginTop: 15,
     marginBottom: 15,
-    backgroundColor: "green", // Змінено колір кнопок на зелений
-    borderRadius: 10, // Змінено радіус кутів
-    padding: 10, // Додано внутрішній відступ для кнопок
+    backgroundColor: "green", 
+    borderRadius: 10, 
+    padding: 10, 
   },
   buttonText: {
     fontSize: 20,
-    color: "white", // Змінено колір тексту на білий
+    color: "white", 
   },
 });
 

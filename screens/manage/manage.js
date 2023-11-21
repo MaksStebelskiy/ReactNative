@@ -1,14 +1,19 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 
-import { buttonStyles } from './manageStyles';
-import dbPromise from '../../data/manageDB';
-import DeleteMode from '../../data/deleteDB';
-import deleteDB from '../../data/deleteDB';
+import { buttonStyles } from "./manageStyles";
+import dbPromise from "../../data/manageDB";
+// import DeleteMode from '../../data/deleteDB';
+import deleteDB from "../../data/deleteDB";
 
-
-const ManageScreen = ({ }) => {
+const ManageScreen = ({}) => {
   const [mode, setMode] = useState("add");
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
@@ -32,27 +37,32 @@ const ManageScreen = ({ }) => {
     setAmount(text);
   };
 
-
-
-
-
-
   //додавання
   const handleAdd = () => {
     if (!selectedYear || !selectedMonth || !selectedService || !amount) {
-      alert('Будь ласка, заповніть всі поля');
+      alert("Будь ласка, заповніть всі поля");
       return;
     }
 
     const amountRegex = /^[0-9]+(\.[0-9]+)?$/;
     if (!amountRegex.test(amount)) {
-      alert('Некоректне значення суми. Будь ласка, введіть числове значення');
+      alert("Некоректне значення суми. Будь ласка, введіть числове значення");
       return;
     }
-    console.log("Додано: ", selectedYear, selectedMonth, selectedService, amount);
+    console.log(
+      "Додано: ",
+      selectedYear,
+      selectedMonth,
+      selectedService,
+      amount
+    );
 
-
-    const values = [selectedYear, selectedMonth, selectedService, parseFloat(amount)];
+    const values = [
+      selectedYear,
+      selectedMonth,
+      selectedService,
+      parseFloat(amount),
+    ];
 
     dbPromise()
       .then((db) => {
@@ -62,10 +72,13 @@ const ManageScreen = ({ }) => {
               `INSERT INTO costs (year, month, service, amount) VALUES (?, ?, ?, ?);`,
               values,
               (_, result) => {
-                console.log('Запис успішно додано до таблиці');
+                console.log("Запис успішно додано до таблиці");
               },
               (_, error) => {
-                console.error('Помилка при додаванні запису до таблиці:', error);
+                console.error(
+                  "Помилка при додаванні запису до таблиці:",
+                  error
+                );
               }
             );
 
@@ -75,25 +88,24 @@ const ManageScreen = ({ }) => {
               [],
               (_, resultSet) => {
                 const rows = resultSet.rows;
-                console.log('Вміст таблиці costs:');
+                console.log("Вміст таблиці costs:");
                 for (let i = 0; i < rows.length; i++) {
                   console.log(rows.item(i));
                 }
               },
               (_, error) => {
-                console.error('Помилка при виборі даних з таблиці:', error);
+                console.error("Помилка при виборі даних з таблиці:", error);
               }
             );
           },
           (error) => {
-            console.error('Помилка при транзакції:', error);
+            console.error("Помилка при транзакції:", error);
           }
         );
       })
       .catch((error) => {
-        console.error('Помилка при доступі до бази даних:', error);
+        console.error("Помилка при доступі до бази даних:", error);
       });
-
   };
 
   const handleCancel = () => {
@@ -107,11 +119,9 @@ const ManageScreen = ({ }) => {
     deleteDB.handleDelete(year, month, service);
   };
 
-
-
   return (
     <View style={{ padding: 20 }}>
-      <Text style={{ fontSize: 17, fontWeight: 'bold', }}>Режим роботи: </Text>
+      <Text style={{ fontSize: 17, fontWeight: "bold" }}>Режим роботи: </Text>
       <RNPickerSelect
         placeholder={{ label: "Виберіть режим", value: null }}
         items={[
@@ -124,10 +134,9 @@ const ManageScreen = ({ }) => {
         value={mode}
       />
 
-
       {mode === "add" && ( //режим додавання
         <>
-          <Text style={{ fontSize: 17, fontWeight: 'bold', }}>Вкажіть рік </Text>
+          <Text style={{ fontSize: 17, fontWeight: "bold" }}>Вкажіть рік </Text>
           <RNPickerSelect
             placeholder={{ label: "Виберіть рік", value: null }}
             items={[
@@ -142,7 +151,9 @@ const ManageScreen = ({ }) => {
             value={selectedYear}
           />
 
-          <Text style={{ fontSize: 17, fontWeight: 'bold', }}>Оберіть місяць: </Text>
+          <Text style={{ fontSize: 17, fontWeight: "bold" }}>
+            Оберіть місяць:{" "}
+          </Text>
           <RNPickerSelect
             placeholder={{ label: "Виберіть місяць", value: null }}
             items={[
@@ -164,7 +175,9 @@ const ManageScreen = ({ }) => {
             value={selectedMonth}
           />
 
-          <Text style={{ fontSize: 17, fontWeight: 'bold', }}>Оберіть послугу: </Text>
+          <Text style={{ fontSize: 17, fontWeight: "bold" }}>
+            Оберіть послугу:{" "}
+          </Text>
           <RNPickerSelect
             placeholder={{ label: "Виберіть послугу", value: null }}
             items={[
@@ -176,7 +189,9 @@ const ManageScreen = ({ }) => {
             value={selectedService}
           />
 
-          <Text style={{ fontSize: 17, fontWeight: 'bold', }}>Вкажіть суму: </Text>
+          <Text style={{ fontSize: 17, fontWeight: "bold" }}>
+            Вкажіть суму:{" "}
+          </Text>
           <TextInput
             placeholder="Введіть суму"
             keyboardType="numeric"
@@ -184,17 +199,23 @@ const ManageScreen = ({ }) => {
             onChangeText={handleAmountChange}
             style={[
               styles.input,
-              hasNonNumeric ? { borderColor: 'red' } : { borderColor: 'gray' },
+              hasNonNumeric ? { borderColor: "red" } : { borderColor: "gray" },
             ]}
           />
 
-          <TouchableOpacity onPress={handleAdd} style={[buttonStyles.buttonContainer, { marginTop: 18, backgroundColor: "green" }]}>
+          <TouchableOpacity
+            onPress={handleAdd}
+            style={[
+              buttonStyles.buttonContainer,
+              { marginTop: 18, backgroundColor: "green" },
+            ]}
+          >
             <Text style={buttonStyles.buttonText}>Додати</Text>
           </TouchableOpacity>
         </>
       )}
 
-      {mode === 'delete' && (
+      {mode === "delete" && (
         <deleteDB.DeleteMode
           selectedYear={selectedYear}
           setSelectedYear={setSelectedYear}
@@ -206,17 +227,21 @@ const ManageScreen = ({ }) => {
         />
       )}
 
-
-
-
       <TouchableOpacity
         onPress={handleCancel}
         style={[
           buttonStyles.buttonContainer,
-          { marginTop: 18, backgroundColor: "white", borderWidth: 1, borderColor: "green" }
+          {
+            marginTop: 18,
+            backgroundColor: "white",
+            borderWidth: 1,
+            borderColor: "green",
+          },
         ]}
       >
-        <Text style={[buttonStyles.buttonText, { color: "green" }]}>Скасувати</Text>
+        <Text style={[buttonStyles.buttonText, { color: "green" }]}>
+          Скасувати
+        </Text>
       </TouchableOpacity>
     </View>
   );
