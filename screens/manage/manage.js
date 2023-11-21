@@ -1,17 +1,41 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
+
+import { buttonStyles } from './manageStyles';
 import dbPromise from '../../data/manageDB';
 import DeleteMode from '../../data/deleteDB';
 import deleteDB from '../../data/deleteDB';
 
 
-const ManageScreen = ({}) => {
+const ManageScreen = ({ }) => {
   const [mode, setMode] = useState("add");
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [selectedService, setSelectedService] = useState(null);
   const [amount, setAmount] = useState("");
+
+  const [hasNonNumeric, setHasNonNumeric] = useState(false);
+  const styles = StyleSheet.create({
+    input: {
+      width: 200,
+      marginTop: 10,
+      padding: 10,
+      borderWidth: 1,
+      borderRadius: 10,
+    },
+  });
+  const handleAmountChange = (text) => {
+    const amountRegex = /^[0-9]+(\.[0-9]+)?$/;
+    const hasNonNumericChars = !amountRegex.test(text);
+    setHasNonNumeric(hasNonNumericChars);
+    setAmount(text);
+  };
+
+
+
+
+
 
   //додавання
   const handleAdd = () => {
@@ -69,7 +93,7 @@ const ManageScreen = ({}) => {
       .catch((error) => {
         console.error('Помилка при доступі до бази даних:', error);
       });
-    
+
   };
 
   const handleCancel = () => {
@@ -82,12 +106,12 @@ const ManageScreen = ({}) => {
   const handleDelete = (year, month, service) => {
     deleteDB.handleDelete(year, month, service);
   };
-    
+
+
 
   return (
     <View style={{ padding: 20 }}>
-      <Text>Сторінка керування</Text>
-
+      <Text style={{ fontSize: 17, fontWeight: 'bold', }}>Режим роботи: </Text>
       <RNPickerSelect
         placeholder={{ label: "Виберіть режим", value: null }}
         items={[
@@ -100,9 +124,10 @@ const ManageScreen = ({}) => {
         value={mode}
       />
 
-          
+
       {mode === "add" && ( //режим додавання
         <>
+          <Text style={{ fontSize: 17, fontWeight: 'bold', }}>Вкажіть рік </Text>
           <RNPickerSelect
             placeholder={{ label: "Виберіть рік", value: null }}
             items={[
@@ -117,6 +142,7 @@ const ManageScreen = ({}) => {
             value={selectedYear}
           />
 
+          <Text style={{ fontSize: 17, fontWeight: 'bold', }}>Оберіть місяць: </Text>
           <RNPickerSelect
             placeholder={{ label: "Виберіть місяць", value: null }}
             items={[
@@ -138,6 +164,7 @@ const ManageScreen = ({}) => {
             value={selectedMonth}
           />
 
+          <Text style={{ fontSize: 17, fontWeight: 'bold', }}>Оберіть послугу: </Text>
           <RNPickerSelect
             placeholder={{ label: "Виберіть послугу", value: null }}
             items={[
@@ -149,21 +176,25 @@ const ManageScreen = ({}) => {
             value={selectedService}
           />
 
+          <Text style={{ fontSize: 17, fontWeight: 'bold', }}>Вкажіть суму: </Text>
           <TextInput
             placeholder="Введіть суму"
             keyboardType="numeric"
             value={amount}
-            onChangeText={(text) => setAmount(text)}
-            style={{ width: 200, marginTop: 10, padding: 10, borderWidth: 1, borderColor: "gray" }}
+            onChangeText={handleAmountChange}
+            style={[
+              styles.input,
+              hasNonNumeric ? { borderColor: 'red' } : { borderColor: 'gray' },
+            ]}
           />
 
-          <TouchableOpacity onPress={handleAdd} style={{ marginTop: 10, backgroundColor: "green", padding: 10 }}>
-            <Text style={{ color: "white" }}>Додати</Text>
+          <TouchableOpacity onPress={handleAdd} style={[buttonStyles.buttonContainer, { marginTop: 18, backgroundColor: "green" }]}>
+            <Text style={buttonStyles.buttonText}>Додати</Text>
           </TouchableOpacity>
         </>
       )}
 
-  {mode === 'delete' && (
+      {mode === 'delete' && (
         <deleteDB.DeleteMode
           selectedYear={selectedYear}
           setSelectedYear={setSelectedYear}
@@ -178,8 +209,14 @@ const ManageScreen = ({}) => {
 
 
 
-      <TouchableOpacity onPress={handleCancel} style={{ marginTop: 10, backgroundColor: "grey", padding: 10 }}>
-        <Text style={{ color: "white" }}>Скасувати</Text>
+      <TouchableOpacity
+        onPress={handleCancel}
+        style={[
+          buttonStyles.buttonContainer,
+          { marginTop: 18, backgroundColor: "white", borderWidth: 1, borderColor: "green" }
+        ]}
+      >
+        <Text style={[buttonStyles.buttonText, { color: "green" }]}>Скасувати</Text>
       </TouchableOpacity>
     </View>
   );
