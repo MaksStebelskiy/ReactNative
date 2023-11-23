@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
+import {TouchableOpacity, Modal, View, Text, ScrollView, Image } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import dbPromise from "../../data/manageDB";
 import { monthNames, ukrainianServiceNames } from './viewValues';
 import { styles } from "./viewStyles";
 
 const ViewScreen = ({}) => {
+  const [modalVisible, setModalVisible] = useState(false);
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [years, setYears] = useState([]);
@@ -92,7 +93,32 @@ const ViewScreen = ({}) => {
   return (
     <ScrollView style={{ flex: 1 }}>
       <View style={{ padding: 20 }}>
+        
+      <View style={{paddingHorizontal: 5, paddingVertical: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
         <Text>Перегляд витрат</Text>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <Image source={require('../../assets/question.png')} style={{ width: 30, height: 30 }} />
+        </TouchableOpacity>
+      </View>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
+            <Text style={{marginTop: 10, textAlign: 'center' }}>На даній сторінці ви можете переглянути витрати на комунальні послуги за певний період. Оберіть потрібний рік та місяць і з'являться витрати за конкретні послуги та загальна сума.</Text>
+            <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+              <Text style={{ color: 'black', marginTop: 20, textAlign: 'right' }}>Закрити</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
 
         <View style={styles.pickerContainer}>
           <RNPickerSelect
