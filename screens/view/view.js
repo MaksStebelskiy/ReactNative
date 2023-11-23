@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import dbPromise from "../../data/manageDB";
+import { monthNames, ukrainianServiceNames } from './viewValues';
+import { styles } from "./viewStyles";
 
 const ViewScreen = ({}) => {
   const [selectedYear, setSelectedYear] = useState(null);
@@ -10,34 +12,7 @@ const ViewScreen = ({}) => {
   const [months, setMonths] = useState([]);
   const [costs, setCosts] = useState([]);
   const TABLE_NAME = "costs";
-  const monthNames = [
-    { label: "Січень", value: "01" },
-    { label: "Лютий", value: "02" },
-    { label: "Березень", value: "03" },
-    { label: "Квітень", value: "04" },
-    { label: "Травень", value: "05" },
-    { label: "Червень", value: "06" },
-    { label: "Липень", value: "07" },
-    { label: "Серпень", value: "08" },
-    { label: "Вересень", value: "09" },
-    { label: "Жовтень", value: "10" },
-    { label: "Листопад", value: "11" },
-    { label: "Грудень", value: "12" },
-  ];
-  const ukrainianServiceNames = {
-    water: "Водопостачання",
-    sewerage: "Водовідведення",
-    hot_water: "Гаряча вода",
-    heating: "Опалення",
-    gas: "Газопостачання",
-    gas_distribution: "Газорозподіл",
-    electricity: "Електроенергія",
-    garbage: "Сміття",
-    condominium: "ОСББ",
-    internet: "Інтернет",
-    television: "Телебачення",
-  };
-
+ 
   useEffect(() => {
     const fetchYears = async () => {
       const db = await dbPromise();
@@ -116,58 +91,59 @@ const ViewScreen = ({}) => {
 
   return (
     <ScrollView style={{ flex: 1 }}>
-    <View style={{ padding: 20 }}>
-      <Text>Перегляд витрат</Text>
+      <View style={{ padding: 20 }}>
+        <Text>Перегляд витрат</Text>
 
-      <View style={{ flexDirection: "row", marginTop: 10 }}>
-        <RNPickerSelect
-          placeholder={{ label: "Виберіть рік", value: null }}
-          items={years}
-          onValueChange={(value) => setSelectedYear(value)}
-          style={{ inputAndroid: { width: 150, marginRight: 10 } }}
-          value={selectedYear}
-        />
+        <View style={styles.pickerContainer}>
+          <RNPickerSelect
+            placeholder={{ label: "Виберіть рік", value: null }}
+            items={years}
+            onValueChange={(value) => setSelectedYear(value)}
+            style={styles.yearPicker}
+            value={selectedYear}
+          />
 
-        <RNPickerSelect
-          placeholder={{ label: "Виберіть місяць", value: null }}
-          items={months}
-          onValueChange={(value) => setSelectedMonth(value)}
-          style={{ inputAndroid: { width: 150 } }}
-          value={selectedMonth}
-        />
-      </View>
-
-      
-      {costs.map((item, index) => (
-        <View key={index} style={styles.costBlock}>
-          <Text style={styles.serviceName}>
-              {ukrainianServiceNames[item.service]}
-          </Text>
-          <Text style={styles.totalAmount}>{item.totalAmount}</Text>
+          <RNPickerSelect
+            placeholder={{ label: "Виберіть місяць", value: null }}
+            items={months}
+            onValueChange={(value) => setSelectedMonth(value)}
+            style={styles.monthPicker}
+            value={selectedMonth}
+          />
         </View>
-      ))}
-    </View>
+
+        {costs
+          .sort((a, b) => {
+            const serviceA =
+              ukrainianServiceNames[a.service].name.toLowerCase();
+            const serviceB =
+              ukrainianServiceNames[b.service].name.toLowerCase();
+            return serviceA.localeCompare(serviceB);
+          })
+          .map((item, index) => (
+            <View key={index} style={styles.costBlock}>
+              <View style={styles.leftBlock}>
+                <Image
+                  source={ukrainianServiceNames[item.service].image}
+                  style={styles.serviceIcon}
+                />
+                <Text style={styles.serviceName}>
+                  {ukrainianServiceNames[item.service].name}
+                </Text>
+              </View>
+              <Text style={styles.totalAmount}>{item.totalAmount}</Text>
+            </View>
+          ))}
+
+        <View style={styles.totalBlock}>
+          <Text style={styles.totalLabel}>Загальна сума:</Text>
+          <Text style={styles.totalAmount}>
+            {costs.reduce((total, item) => total + item.totalAmount, 0)}
+          </Text>
+        </View>
+      </View>
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  costBlock: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 10,
-    marginVertical: 5,
-    backgroundColor: "#e0e0e0", // Змініть колір за потребою
-    borderRadius: 5,
-  },
-  serviceName: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  totalAmount: {
-    fontSize: 16,
-  },
-});
 
 export default ViewScreen;

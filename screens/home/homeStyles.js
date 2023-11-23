@@ -8,6 +8,7 @@ export const homeStyles = StyleSheet.create({
     padding: 20,
   },
   greetingText: {
+    textAlign: "center",
     fontSize: 18,
     marginBottom: 10,
     marginTop: 50,

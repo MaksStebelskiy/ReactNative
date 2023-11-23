@@ -8,12 +8,12 @@ const HomeScreen = ({ navigation }) => {
     <View style={homeStyles.container}>
 
 <Image
-        source={require('../../assets/utility.png')} // Зазначте правильний шлях до зображення
+        source={require('../../assets/utility.png')} 
         style={homeStyles.image}
       />
 
       <Text style={homeStyles.greetingText}>
-        Ласкаво просимо до портфоліо витрат!
+        Ласкаво просимо до портфоліо витрат
       </Text>
       
       <TouchableOpacity

@@ -34,7 +34,7 @@ const dbPromise = () => {
           reject(error);
         },
         () => {
-          console.log("Transaction is successful");
+          // console.log("Transaction is successful");
         }
       );
     } catch (error) {
