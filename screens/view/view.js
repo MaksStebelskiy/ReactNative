@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { View, Text, FlatList, StyleSheet, ScrollView } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import dbPromise from "../../data/manageDB";
 
@@ -24,6 +24,19 @@ const ViewScreen = ({}) => {
     { label: "Листопад", value: "11" },
     { label: "Грудень", value: "12" },
   ];
+  const ukrainianServiceNames = {
+    water: "Водопостачання",
+    sewerage: "Водовідведення",
+    hot_water: "Гаряча вода",
+    heating: "Опалення",
+    gas: "Газопостачання",
+    gas_distribution: "Газорозподіл",
+    electricity: "Електроенергія",
+    garbage: "Сміття",
+    condominium: "ОСББ",
+    internet: "Інтернет",
+    television: "Телебачення",
+  };
 
   useEffect(() => {
     const fetchYears = async () => {
@@ -102,6 +115,7 @@ const ViewScreen = ({}) => {
   }, [selectedYear, selectedMonth]);
 
   return (
+    <ScrollView style={{ flex: 1 }}>
     <View style={{ padding: 20 }}>
       <Text>Перегляд витрат</Text>
 
@@ -123,14 +137,17 @@ const ViewScreen = ({}) => {
         />
       </View>
 
-      {/* Додаємо блоки для відображення витрат */}
+      
       {costs.map((item, index) => (
         <View key={index} style={styles.costBlock}>
-          <Text style={styles.serviceName}>{item.service}</Text>
+          <Text style={styles.serviceName}>
+              {ukrainianServiceNames[item.service]}
+          </Text>
           <Text style={styles.totalAmount}>{item.totalAmount}</Text>
         </View>
       ))}
     </View>
+    </ScrollView>
   );
 };
 
