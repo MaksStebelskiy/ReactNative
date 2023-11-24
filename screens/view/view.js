@@ -95,7 +95,7 @@ const ViewScreen = ({}) => {
       <View style={{ padding: 20 }}>
         
       <View style={{paddingHorizontal: 5, paddingVertical: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Text>Перегляд витрат</Text>
+        <Text style={{fontSize: 17, fontWeight: "bold" }}>Перегляд витрат</Text>
         <TouchableOpacity onPress={() => setModalVisible(true)}>
           <Image source={require('../../assets/question.png')} style={{ width: 30, height: 30 }} />
         </TouchableOpacity>
@@ -122,7 +122,7 @@ const ViewScreen = ({}) => {
 
         <View style={styles.pickerContainer}>
           <RNPickerSelect
-            placeholder={{ label: "Виберіть рік", value: null }}
+            placeholder={{ label: "Рік", value: null }}
             items={years}
             onValueChange={(value) => setSelectedYear(value)}
             style={styles.yearPicker}
@@ -130,7 +130,7 @@ const ViewScreen = ({}) => {
           />
 
           <RNPickerSelect
-            placeholder={{ label: "Виберіть місяць", value: null }}
+            placeholder={{ label: "Місяць", value: null }}
             items={months}
             onValueChange={(value) => setSelectedMonth(value)}
             style={styles.monthPicker}
