@@ -11,16 +11,23 @@ export const buttonStyles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
   },
+  pickerSelectAdd: {
+    inputAndroid: {
+      width: 230,
+      marginTop: 5,
+    },
+  },
   buttonDelete: {
-    marginTop: 10,
+    marginTop: 30,
     backgroundColor: 'red',
     padding: 10,
     borderRadius: 10,
     alignItems: 'center',
   },
   textInputDelete: {
-    width: 185,
+    width: 170,
     marginTop: 10,
+    marginLeft: 13,
     padding: 10,
     borderWidth: 1,
     borderColor: 'gray',

@@ -12,7 +12,7 @@ export const handleAmountChange = (text, setHasNonNumeric, setAmount) => {
   setAmount(text);
 };
 
-export const handleAdd = (year, month, service, amount) => {
+export const handleAdd = (year, month, service, amount, setAmount) => {
   if (!year || !month || !service || !amount) {
     alert("Будь ласка, заповніть всі поля");
     return;
@@ -47,6 +47,7 @@ export const handleAdd = (year, month, service, amount) => {
                   (_, result) => {
                     console.log("Запис успішно додано до таблиці");
                     console.log("Додано: ", year, month, service, amount);
+                    setAmount("");
                   },
                   (_, error) => {
                     console.error(
@@ -101,14 +102,11 @@ export const AddMode = (
       <RNPickerSelect
         placeholder={{ label: "Виберіть рік", value: null }}
         items={[
-          { label: "2020", value: "2020" },
-          { label: "2021", value: "2021" },
-          { label: "2022", value: "2022" },
           { label: "2023", value: "2023" },
           { label: "2024", value: "2024" },
         ]}
         onValueChange={(value) => setSelectedYear(value)}
-        style={{ inputAndroid: { width: 200, marginTop: 10 } }}
+        style={buttonStyles.pickerSelectAdd}
         value={selectedYear}
       />
 
@@ -130,7 +128,7 @@ export const AddMode = (
           { label: "Грудень", value: "12" },
         ]}
         onValueChange={(value) => setSelectedMonth(value)}
-        style={{ inputAndroid: { width: 200, marginTop: 10 } }}
+        style={buttonStyles.pickerSelectAdd}
         value={selectedMonth}
       />
 
@@ -153,7 +151,7 @@ export const AddMode = (
           { label: "Телебачення", value: "television" },
         ]}
         onValueChange={(value) => setSelectedService(value)}
-        style={{ inputAndroid: { width: 200, marginTop: 10 } }}
+        style={buttonStyles.pickerSelectAdd}
         value={selectedService}
       />
 
@@ -173,11 +171,11 @@ export const AddMode = (
 
       <TouchableOpacity
         onPress={() =>
-          handleAdd(selectedYear, selectedMonth, selectedService, amount)
+          handleAdd(selectedYear, selectedMonth, selectedService, amount, setAmount)
         }
         style={[
           buttonStyles.buttonContainer,
-          { marginTop: 18, backgroundColor: "green" },
+          { marginTop: 30, backgroundColor: "green" },
         ]}
       >
         <Text style={buttonStyles.buttonText}>Додати</Text>

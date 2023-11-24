@@ -102,7 +102,7 @@ const ManageScreen = ({}) => {
             { label: "Видалити", value: "delete" },
           ]}
           onValueChange={(value) => setMode(value)}
-          style={{ inputAndroid: { width: 200, marginTop: 10 } }}
+          style={buttonStyles.pickerSelectAdd}
           value={mode}
         />
 
