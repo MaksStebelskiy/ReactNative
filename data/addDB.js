@@ -2,7 +2,9 @@
 import React from "react";
 import { Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
+import FlashMessage, { showMessage } from "react-native-flash-message";
 import { buttonStyles } from "../screens/manage/manageStyles";
+import { monthNames, ukrainianServiceNames } from "../screens/view/viewValues";
 import dbPromise from "./manageDB";
 
 export const handleAmountChange = (text, setHasNonNumeric, setAmount) => {
@@ -23,7 +25,6 @@ export const handleAdd = (year, month, service, amount, setAmount) => {
     alert("Некоректне значення суми. Будь ласка, введіть числове значення");
     return;
   }
- 
 
   const values = [year, month, service, parseFloat(amount)];
 
@@ -38,7 +39,12 @@ export const handleAdd = (year, month, service, amount, setAmount) => {
             (_, resultSet) => {
               if (resultSet.rows.length > 0) {
                 // Запис вже існує
-                alert("Запис з такими даними вже існує");
+
+                showMessage({
+                  message: 'Запис з такими даними вже існує',
+                  type: 'warning',
+                });
+
               } else {
                 // Додавання запису
                 tx.executeSql(
@@ -47,6 +53,22 @@ export const handleAdd = (year, month, service, amount, setAmount) => {
                   (_, result) => {
                     console.log("Запис успішно додано до таблиці");
                     console.log("Додано: ", year, month, service, amount);
+
+                    
+                    const selectedMonthLabel = monthNames.find(
+                      (m) => m.value === month
+                    )?.label;
+                    
+                    const selectedServiceName =
+                      ukrainianServiceNames[service]?.name;
+                    showMessage({
+                      message: "Успіх",
+                      description: `Додано:\nПослуга - ${selectedServiceName}\nСума - ${amount}\nМісяць - ${selectedMonthLabel}\nРік - ${year}`,
+                      type: "success",
+                      duration: 5000,
+                      hideOnPress: true,
+                    });
+
                     setAmount("");
                   },
                   (_, error) => {
@@ -171,7 +193,13 @@ export const AddMode = (
 
       <TouchableOpacity
         onPress={() =>
-          handleAdd(selectedYear, selectedMonth, selectedService, amount, setAmount)
+          handleAdd(
+            selectedYear,
+            selectedMonth,
+            selectedService,
+            amount,
+            setAmount
+          )
         }
         style={[
           buttonStyles.buttonContainer,
@@ -180,6 +208,7 @@ export const AddMode = (
       >
         <Text style={buttonStyles.buttonText}>Додати</Text>
       </TouchableOpacity>
+      <FlashMessage position="center" />
     </>
   );
 };

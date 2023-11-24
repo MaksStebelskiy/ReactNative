@@ -4,6 +4,9 @@ import RNPickerSelect from "react-native-picker-select";
 import { buttonStyles } from "../screens/manage/manageStyles";
 import { monthNames, ukrainianServiceNames } from "../screens/view/viewValues";
 import dbPromise from "./manageDB";
+import FlashMessage, { showMessage } from "react-native-flash-message";
+
+
 
 const handleDelete = async (year, month, service) => {
   try {
@@ -96,7 +99,11 @@ const DeleteMode = ({
 
   const handleDeleteWithLogging = async () => {
     if (!selectedYear || selectedMonth === null || !selectedService || !month) {
-      Alert.alert("Помилка", "Будь ласка, виберіть рік, місяць та послугу.");
+      showMessage({
+        message: 'Будь ласка, виберіть рік, місяць та послугу.',
+        type: 'warning',
+      });
+
       return;
     }
     const selectedMonthLabel = monthNames.find(
@@ -105,11 +112,15 @@ const DeleteMode = ({
     const serviceName = ukrainianServiceNames[selectedService]?.name;
 
     await handleDelete(selectedYear, selectedMonth, selectedService);
-    setSelectedService(null); 
-    Alert.alert(
-      "Успіх",
-      `Видалено:\nПослуга - ${serviceName}\nМісяць - ${selectedMonthLabel}\nРік - ${selectedYear}`
-    );  
+    setSelectedService(null);
+    
+    showMessage({
+      message: "Успіх",
+      description: `Видалено:\nПослуга - ${serviceName}\nМісяць - ${selectedMonthLabel}\nРік - ${selectedYear}`,
+      type: "success",
+    });
+    
+    fetchServices(selectedYear, selectedMonth);
   };
 
   useEffect(() => {
@@ -160,6 +171,7 @@ const DeleteMode = ({
       >
         <Text style={buttonStyles.buttonText}>Видалити</Text>
       </TouchableOpacity>
+      <FlashMessage position="center" />
     </View>
   );
 };

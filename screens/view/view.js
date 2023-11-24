@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
-import {TouchableOpacity, Modal, View, Text, ScrollView, Image } from "react-native";
+import {
+  TouchableOpacity,
+  Modal,
+  View,
+  Text,
+  ScrollView,
+  Image,
+} from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import dbPromise from "../../data/manageDB";
-import { monthNames, ukrainianServiceNames } from './viewValues';
+import { monthNames, ukrainianServiceNames } from "./viewValues";
 import { styles } from "./viewStyles";
 
 const ViewScreen = ({}) => {
@@ -13,7 +20,7 @@ const ViewScreen = ({}) => {
   const [months, setMonths] = useState([]);
   const [costs, setCosts] = useState([]);
   const TABLE_NAME = "costs";
- 
+
   useEffect(() => {
     const fetchYears = async () => {
       const db = await dbPromise();
@@ -93,32 +100,58 @@ const ViewScreen = ({}) => {
   return (
     <ScrollView style={{ flex: 1 }}>
       <View style={{ padding: 20 }}>
-        
-      <View style={{paddingHorizontal: 5, paddingVertical: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Text style={{fontSize: 17, fontWeight: "bold" }}>Перегляд витрат</Text>
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <Image source={require('../../assets/question.png')} style={{ width: 30, height: 30 }} />
-        </TouchableOpacity>
-      </View>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
-            <Text style={{marginTop: 10, textAlign: 'center' }}>На даній сторінці ви можете переглянути витрати на комунальні послуги за певний період. Оберіть потрібний рік та місяць і з'являться витрати за конкретні послуги та загальна сума.</Text>
-            <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
-              <Text style={{ color: 'black', marginTop: 20, textAlign: 'right' }}>Закрити</Text>
-            </TouchableOpacity>
-          </View>
+        <View
+          style={{
+            paddingHorizontal: 5,
+            paddingVertical: 5,
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text style={{ fontSize: 17, fontWeight: "bold" }}>
+            Перегляд витрат
+          </Text>
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
+            <Image
+              source={require("../../assets/question.png")}
+              style={{ width: 30, height: 30 }}
+            />
+          </TouchableOpacity>
         </View>
-      </Modal>
 
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
+            <View
+              style={{
+                backgroundColor: "white",
+                padding: 20,
+                borderRadius: 10,
+              }}
+            >
+              <Text style={{ marginTop: 10, textAlign: "center" }}>
+                На даній сторінці ви можете переглянути витрати на комунальні
+                послуги за певний період. Оберіть потрібний рік та місяць і
+                з'являться витрати за конкретні послуги та загальна сума.
+              </Text>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <Text
+                  style={{ color: "black", marginTop: 20, textAlign: "right" }}
+                >
+                  Закрити
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
 
         <View style={styles.pickerContainer}>
           <RNPickerSelect
@@ -164,7 +197,9 @@ const ViewScreen = ({}) => {
         <View style={styles.totalBlock}>
           <Text style={styles.totalLabel}>Загальна сума:</Text>
           <Text style={styles.totalAmount}>
-            {costs.reduce((total, item) => total + item.totalAmount, 0)}
+            {costs
+              .reduce((total, item) => total + item.totalAmount, 0)
+              .toFixed(2)}
           </Text>
         </View>
       </View>
