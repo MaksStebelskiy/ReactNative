@@ -25,7 +25,7 @@ export const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 5,
     backgroundColor: "#e0e0e0",
-    borderRadius: 5,
+    borderRadius: 10,
   },
   leftBlock: {
     flexDirection: "row",
@@ -52,10 +52,8 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
     marginVertical: 15,
-    backgroundColor: "#e0e0e0",
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: "green",
+    backgroundColor: "green",
+    borderRadius: 10,
   },
   totalLabel: {
     fontSize: 16,

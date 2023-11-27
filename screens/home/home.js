@@ -13,7 +13,7 @@ const HomeScreen = ({ navigation }) => {
       />
 
       <Text style={homeStyles.greetingText}>
-        Ласкаво просимо до портфоліо витрат
+        Ласкаво просимо до менеджера витрат
       </Text>
       
       <TouchableOpacity

@@ -1,6 +1,12 @@
 // addDB.js
 import React from "react";
-import { Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import { buttonStyles } from "../screens/manage/manageStyles";
@@ -41,10 +47,9 @@ export const handleAdd = (year, month, service, amount, setAmount) => {
                 // Запис вже існує
 
                 showMessage({
-                  message: 'Запис з такими даними вже існує',
-                  type: 'warning',
+                  message: "Запис з такими даними вже існує",
+                  type: "warning",
                 });
-
               } else {
                 // Додавання запису
                 tx.executeSql(
@@ -54,11 +59,10 @@ export const handleAdd = (year, month, service, amount, setAmount) => {
                     console.log("Запис успішно додано до таблиці");
                     console.log("Додано: ", year, month, service, amount);
 
-                    
                     const selectedMonthLabel = monthNames.find(
                       (m) => m.value === month
                     )?.label;
-                    
+
                     const selectedServiceName =
                       ukrainianServiceNames[service]?.name;
                     showMessage({
@@ -120,76 +124,83 @@ export const AddMode = (
 
   return (
     <>
-      <Text style={{ fontSize: 17, fontWeight: "bold" }}>Вкажіть рік </Text>
-      <RNPickerSelect
-        placeholder={{ label: "Виберіть рік", value: null }}
-        items={[
-          { label: "2023", value: "2023" },
-          { label: "2024", value: "2024" },
-        ]}
-        onValueChange={(value) => setSelectedYear(value)}
-        style={buttonStyles.pickerSelectAdd}
-        value={selectedYear}
-      />
-
-      <Text style={{ fontSize: 17, fontWeight: "bold" }}>Оберіть місяць: </Text>
-      <RNPickerSelect
-        placeholder={{ label: "Виберіть місяць", value: null }}
-        items={[
-          { label: "Січень", value: "01" },
-          { label: "Лютий", value: "02" },
-          { label: "Березень", value: "03" },
-          { label: "Квітень", value: "04" },
-          { label: "Травень", value: "05" },
-          { label: "Червень", value: "06" },
-          { label: "Липень", value: "07" },
-          { label: "Серпень", value: "08" },
-          { label: "Вересень", value: "09" },
-          { label: "Жовтень", value: "10" },
-          { label: "Листопад", value: "11" },
-          { label: "Грудень", value: "12" },
-        ]}
-        onValueChange={(value) => setSelectedMonth(value)}
-        style={buttonStyles.pickerSelectAdd}
-        value={selectedMonth}
-      />
-
-      <Text style={{ fontSize: 17, fontWeight: "bold" }}>
-        Оберіть послугу:{" "}
-      </Text>
-      <RNPickerSelect
-        placeholder={{ label: "Виберіть послугу", value: null }}
-        items={[
-          { label: "Водопостачання", value: "water" },
-          { label: "Водовідведення", value: "sewerage" },
-          { label: "Гаряча вода", value: "hot_water" },
-          { label: "Опалення", value: "heating" },
-          { label: "Газопостачання", value: "gas" },
-          { label: "Газорозподіл", value: "gas_distribution" },
-          { label: "Електроенергія", value: "electricity" },
-          { label: "Сміття", value: "garbage" },
-          { label: "ОСББ", value: "condominium" },
-          { label: "Інтернет", value: "internet" },
-          { label: "Телебачення", value: "television" },
-        ]}
-        onValueChange={(value) => setSelectedService(value)}
-        style={buttonStyles.pickerSelectAdd}
-        value={selectedService}
-      />
-
-      <Text style={{ fontSize: 17, fontWeight: "bold" }}>Вкажіть суму: </Text>
-      <TextInput
-        placeholder="Введіть суму"
-        keyboardType="numeric"
-        value={amount}
-        onChangeText={(text) =>
-          handleAmountChange(text, setHasNonNumeric, setAmount)
-        }
-        style={[
-          styles.input,
-          hasNonNumeric ? { borderColor: "red" } : { borderColor: "gray" },
-        ]}
-      />
+      <View style={buttonStyles.block}>
+      <Text style={buttonStyles.label}>Оберіть рік </Text>
+        <RNPickerSelect
+          placeholder={{ label: "Рік", value: null }}
+          items={[
+            { label: "2023", value: "2023" },
+            { label: "2024", value: "2024" },
+          ]}
+          onValueChange={(value) => setSelectedYear(value)}
+          style={buttonStyles.pickerSelectAdd}
+          value={selectedYear}
+        />
+      </View>
+      <View style={buttonStyles.block}>
+        <Text style={buttonStyles.label}>
+          Оберіть місяць:{" "}
+        </Text>
+        <RNPickerSelect
+          placeholder={{ label: "Місяць", value: null }}
+          items={[
+            { label: "Січень", value: "01" },
+            { label: "Лютий", value: "02" },
+            { label: "Березень", value: "03" },
+            { label: "Квітень", value: "04" },
+            { label: "Травень", value: "05" },
+            { label: "Червень", value: "06" },
+            { label: "Липень", value: "07" },
+            { label: "Серпень", value: "08" },
+            { label: "Вересень", value: "09" },
+            { label: "Жовтень", value: "10" },
+            { label: "Листопад", value: "11" },
+            { label: "Грудень", value: "12" },
+          ]}
+          onValueChange={(value) => setSelectedMonth(value)}
+          style={buttonStyles.pickerSelectAdd}
+          value={selectedMonth}
+        />
+      </View>
+      <View style={buttonStyles.block}>
+      <Text style={buttonStyles.label}>
+          Оберіть послугу:{" "}
+        </Text>
+        <RNPickerSelect
+          placeholder={{ label: "Послуга", value: null }}
+          items={[
+            { label: "Водопостачання", value: "water" },
+            { label: "Водовідведення", value: "sewerage" },
+            { label: "Гаряча вода", value: "hot_water" },
+            { label: "Опалення", value: "heating" },
+            { label: "Газопостачання", value: "gas" },
+            { label: "Газорозподіл", value: "gas_distribution" },
+            { label: "Електроенергія", value: "electricity" },
+            { label: "Сміття", value: "garbage" },
+            { label: "ОСББ", value: "condominium" },
+            { label: "Інтернет", value: "internet" },
+            { label: "Телебачення", value: "television" },
+          ]}
+          onValueChange={(value) => setSelectedService(value)}
+          style={buttonStyles.pickerSelectAdd}
+          value={selectedService}
+        />
+      </View>
+      <View style={buttonStyles.block}>
+      <Text style={buttonStyles.label}>Вкажіть суму: </Text>
+        <TextInput
+          placeholder="Сума"
+          keyboardType="numeric"
+          value={amount}
+          onChangeText={(text) =>
+            handleAmountChange(text, setHasNonNumeric, setAmount)
+          }
+          style={[
+            styles.input,
+            hasNonNumeric ? { borderColor: "red" } : { borderColor: "gray" },
+          ]}
+        />
+      </View>
 
       <TouchableOpacity
         onPress={() =>
@@ -203,7 +214,7 @@ export const AddMode = (
         }
         style={[
           buttonStyles.buttonContainer,
-          { marginTop: 30, backgroundColor: "green" },
+          { backgroundColor: "green" },
         ]}
       >
         <Text style={buttonStyles.buttonText}>Додати</Text>

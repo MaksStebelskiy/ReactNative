@@ -160,41 +160,56 @@ const EditMode = ({
 
   return (
     <View>
+      <View style={buttonStyles.block}>
+      <Text style={buttonStyles.label}>Введіть рік:</Text>
       <TextInput
-        placeholder="Введіть рік"
+        placeholder="Рік"
         keyboardType="numeric"
         value={selectedYear}
         onChangeText={(text) => setSelectedYear(text)}
         style={buttonStyles.textInputDelete}
       />
+      </View>
 
+      <View style={buttonStyles.block}>
+      <Text style={buttonStyles.label}>Оберіть місяць:</Text>
       <RNPickerSelect
-        placeholder={{ label: "Виберіть місяць", value: null }}
+        placeholder={{ label: "Місяць", value: null }}
         items={month}
         onValueChange={(value) => setSelectedMonth(value)}
         style={buttonStyles.pickerSelect}
         value={selectedMonth}
       />
+      </View>
 
+      <View style={buttonStyles.block}>
+      <Text style={buttonStyles.label}>Оберіть послугу:</Text>
       <RNPickerSelect
-        placeholder={{ label: "Виберіть послугу", value: null }}
+        placeholder={{ label: "Послуга", value: null }}
         items={services}
         onValueChange={(value) => setSelectedService(value)}
         style={buttonStyles.pickerSelect}
         value={selectedService}
       />
+      </View>
 
+      <View style={buttonStyles.block}>
+      <Text style={buttonStyles.label}>Введіть нову суму:</Text>
       <TextInput
-        placeholder="Введіть суму"
+        placeholder="Сума"
         keyboardType="numeric"
         value={amount}
         onChangeText={(text) => setAmount(text)}
         style={buttonStyles.textInputDelete}
       />
+      </View>
 
       <TouchableOpacity
         onPress={handleEditWithLogging}
-        style={buttonStyles.buttonDelete}
+        style={[
+          buttonStyles.buttonContainer,
+          { backgroundColor: "green" },
+        ]}
       >
         <Text style={buttonStyles.buttonText}>Оновити</Text>
       </TouchableOpacity>

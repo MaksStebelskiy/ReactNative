@@ -1,11 +1,31 @@
 import { StyleSheet } from 'react-native';
 
 export const buttonStyles = StyleSheet.create({
+  
+  block: {
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: "#DCDCDC",
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginLeft: 5,
+  },
+  input: {
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  
   buttonContainer: {
     padding: 10,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 20,
   },
   buttonText: {
     color: 'white',
@@ -13,12 +33,11 @@ export const buttonStyles = StyleSheet.create({
   },
   pickerSelectAdd: {
     inputAndroid: {
-      width: 230,
-      marginTop: 5,
+      width: 170,
     },
   },
   buttonDelete: {
-    marginTop: 30,
+    marginTop: 20,
     backgroundColor: 'red',
     padding: 10,
     borderRadius: 10,
@@ -27,7 +46,6 @@ export const buttonStyles = StyleSheet.create({
   textInputDelete: {
     width: 170,
     marginTop: 10,
-    marginLeft: 13,
     padding: 10,
     borderWidth: 1,
     borderColor: 'gray',
@@ -35,8 +53,7 @@ export const buttonStyles = StyleSheet.create({
   },
   pickerSelect: {
     inputAndroid: {
-      width: 250,
-      marginTop: 10,
+      width: 170,
     },
   },
 });

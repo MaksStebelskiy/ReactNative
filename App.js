@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './screens/home/home.js';
 import ViewScreen from './screens/view/view.js';
 import ManageScreen from './screens/manage/manage.js';
-import { View } from 'react-native';
+
 
 const Stack = createStackNavigator();
 
@@ -16,7 +16,7 @@ const App = () => {
         initialRouteName="HomeScreen"
         screenOptions={{
           headerStyle: {
-            backgroundColor: 'green', // Колір фону для заголовка
+            backgroundColor: 'green', 
           }
         }}
       >

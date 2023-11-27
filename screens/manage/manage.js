@@ -52,7 +52,7 @@ const ManageScreen = ({}) => {
             justifyContent: "space-between",
           }}
         >
-          <Text style={{ fontSize: 17, fontWeight: "bold" }}>
+          <Text style={buttonStyles.label}>
             Режим роботи:{" "}
           </Text>
           <TouchableOpacity onPress={() => setModalVisible(true)}>
