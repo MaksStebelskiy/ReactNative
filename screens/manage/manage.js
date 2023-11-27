@@ -11,6 +11,7 @@ import RNPickerSelect from "react-native-picker-select";
 import { buttonStyles } from "./manageStyles";
 import { handleDelete, DeleteMode } from "../../data/deleteDB";
 import { handleAdd, AddMode } from "../../data/addDB";
+import { handleEdit, EditMode as EditModeComponent } from "../../data/editDB";
 
 const ManageScreen = ({}) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -25,15 +26,19 @@ const ManageScreen = ({}) => {
     handleAdd(selectedYear, selectedMonth, selectedService, amount);
   };
 
+  const handleEditPress = async () => {
+    await handleEdit(selectedYear, selectedMonth, selectedService, amount);
+  };
+
+  const handleDeletePress = async () => {
+    await handleDelete(selectedYear, selectedMonth, selectedService);
+  };
+
   const handleCancel = () => {
     setSelectedYear(null);
     setSelectedMonth(null);
     setSelectedService(null);
     setAmount("");
-  };
-
-  const handleDeletePress = async () => {
-    await handleDelete(selectedYear, selectedMonth, selectedService);
   };
 
   return (
@@ -121,6 +126,22 @@ const ManageScreen = ({}) => {
             handleAdd,
             handleAddPress
           )}
+
+        {mode === "edit" && (
+          <EditModeComponent
+            selectedYear={selectedYear}
+            setSelectedYear={setSelectedYear}
+            selectedMonth={selectedMonth}
+            setSelectedMonth={setSelectedMonth}
+            selectedService={selectedService}
+            setSelectedService={setSelectedService}
+            amount={amount}
+            setAmount={setAmount}
+            hasNonNumeric={hasNonNumeric}
+            setHasNonNumeric={setHasNonNumeric}
+            handleEdit={handleEditPress}
+          />
+        )}
 
         {mode === "delete" && (
           <DeleteMode

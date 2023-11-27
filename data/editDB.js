@@ -1,45 +1,48 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
-import { buttonStyles } from "../screens/manage/manageStyles";
-import { monthNames, ukrainianServiceNames } from "../screens/view/viewValues";
 import dbPromise from "./manageDB";
+import { buttonStyles } from "../screens/manage/manageStyles";
 import FlashMessage, { showMessage } from "react-native-flash-message";
+import { monthNames, ukrainianServiceNames } from "../screens/view/viewValues";
 
-
-
-const handleDelete = async (year, month, service) => {
+// функція оновлення (після виклику)
+const updateRecordInDB = async (year, month, service, amount) => {
   try {
     const db = await dbPromise();
-
-    db.transaction((tx) => {
+    await db.transaction((tx) => {
+      console.log("amount в handleEdit", amount);
       tx.executeSql(
-        "DELETE FROM costs WHERE year = ? AND month = ? AND service = ?;",
-        [year, month, service],
+        "UPDATE costs SET amount = ? WHERE year = ? AND month = ? AND service = ?;",
+        [amount, year, month, service],
         (_, result) => {
-          console.log("Row deleted successfully.");
+          if (result.rowsAffected > 0) {
+            console.log("Row updated successfully. New amount:", amount);
+          } else {
+            console.log("No rows updated.");
+          }
         },
         (_, error) => {
-          console.error("Error deleting row:", error);
+          console.error("Error updating row:", error);
         }
       );
     });
   } catch (error) {
-    console.error("Error deleting row:", error);
+    console.error("Error updating row:", error);
   }
 };
 
-const DeleteMode = ({
+const EditMode = ({
   selectedYear,
   setSelectedYear,
   selectedMonth,
   setSelectedMonth,
   selectedService,
   setSelectedService,
-  handleDelete,
 }) => {
   const [month, setMonth] = useState([]);
   const [services, setServices] = useState([]);
+  const [amount, setAmount] = useState("");
 
   const fetchMonths = async (year) => {
     try {
@@ -73,7 +76,7 @@ const DeleteMode = ({
   const fetchServices = async (year, selectedMonth) => {
     try {
       const db = await dbPromise();
-      db.transaction((tx) => {
+      await db.transaction((tx) => {
         tx.executeSql(
           "SELECT DISTINCT service FROM costs WHERE year = ? AND month = ?;",
           [year, selectedMonth],
@@ -97,34 +100,48 @@ const DeleteMode = ({
     }
   };
 
-  const handleDeleteWithLogging = async () => {
-    if (!selectedYear || selectedMonth === null || !selectedService || !month) {
+  const handleEditWithLogging = async () => {
+    if (
+      !selectedYear ||
+      selectedMonth === null ||
+      !selectedService ||
+      !amount
+    ) {
       showMessage({
-        message: 'Будь ласка, виберіть рік, місяць та послугу.',
-        type: 'warning',
+        message: "Будь ласка, виберіть рік, місяць та послугу.",
+        type: "warning",
       });
-
       return;
     }
+  
     const selectedMonthLabel = monthNames.find(
       (m) => m.value === selectedMonth
     )?.label;
     const serviceName = ukrainianServiceNames[selectedService]?.name;
-
-    await handleDelete(selectedYear, selectedMonth, selectedService);
-    setSelectedService(null);
-    
-    showMessage({
-      message: "Успіх",
-      description: `Видалено:\nПослуга - ${serviceName}\nМісяць - ${selectedMonthLabel}\nРік - ${selectedYear}`,
-      type: "success",
-    });
-    
-    fetchServices(selectedYear, selectedMonth);
+  
+    if (amount) {
+      console.log("amount в handleEditWithLogging", amount);
+      await updateRecordInDB(
+        selectedYear,
+        selectedMonth,
+        selectedService,
+        amount,
+      );
+      showMessage({
+        message: "Успіх",
+        description: `Оновлено значення суми:\nПослуга - ${serviceName}\nМісяць - ${selectedMonthLabel}\nРік - ${selectedYear}\nНова сума - ${amount}`,
+        type: "success",
+      });
+  
+      fetchServices(selectedYear, selectedMonth, selectedService);
+    } else {
+      showMessage({
+        message: "Будь ласка, введіть суму.",
+        type: "warning",
+      });
+    }
   };
 
-
-  
   useEffect(() => {
     const fetchData = async () => {
       if (selectedYear) {
@@ -167,15 +184,24 @@ const DeleteMode = ({
         value={selectedService}
       />
 
+      <TextInput
+        placeholder="Введіть суму"
+        keyboardType="numeric"
+        value={amount}
+        onChangeText={(text) => setAmount(text)}
+        style={buttonStyles.textInputDelete}
+      />
+
       <TouchableOpacity
-        onPress={handleDeleteWithLogging}
+        onPress={handleEditWithLogging}
         style={buttonStyles.buttonDelete}
       >
-        <Text style={buttonStyles.buttonText}>Видалити</Text>
+        <Text style={buttonStyles.buttonText}>Оновити</Text>
       </TouchableOpacity>
+
       <FlashMessage position="center" />
     </View>
   );
 };
 
-export { handleDelete, DeleteMode };
+export { EditMode };
