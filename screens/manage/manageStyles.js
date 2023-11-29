@@ -7,6 +7,7 @@ export const buttonStyles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
     backgroundColor: "#DCDCDC",
+    elevation: 5,
   },
   label: {
     fontSize: 16,
@@ -26,6 +27,7 @@ export const buttonStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
+    elevation: 5,
   },
   buttonText: {
     color: 'white',
@@ -42,6 +44,7 @@ export const buttonStyles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     alignItems: 'center',
+    elevation: 5,
   },
   textInputDelete: {
     width: 170,

@@ -26,6 +26,7 @@ export const styles = StyleSheet.create({
     marginVertical: 5,
     backgroundColor: "#e0e0e0",
     borderRadius: 10,
+    elevation: 5,
   },
   leftBlock: {
     flexDirection: "row",
@@ -54,6 +55,7 @@ export const styles = StyleSheet.create({
     marginVertical: 15,
     backgroundColor: "green",
     borderRadius: 10,
+    elevation: 5,
   },
   totalLabel: {
     fontSize: 16,
